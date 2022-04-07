@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:menuCategory="secondary"
+    android:id="@+id/navigation_home"
+    android:icon="@drawable/ic_home"
+    android:title="@string/str_home"/>
+
+    <item android:menuCategory="secondary"
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_serach"
+        android:title="@string/str_search"/>
+
+    <item android:menuCategory="secondary"
+        android:id="@+id/navigation_upload"
+        android:icon="@drawable/ic_upload"
+        android:title="@string/str_upload"/>
+
+    <item android:menuCategory="secondary"
+        android:id="@+id/navigation_favourite"
+        android:icon="@drawable/ic_favourite"
+        android:title="@string/str_favourite"/>
+    <item android:menuCategory="secondary"
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/str_profile"/>
+</menu>
