@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 It contains view pager with 5 fragments in  MainActivity,
 and pages can be controlled by BottomNavigationView
  */
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), UploadFragment.UploadListener,HomeFragment.HomeListener {
 
     val TAG = MainActivity::class.java.simpleName
     var index = 8
@@ -28,37 +28,53 @@ class MainActivity : BaseActivity() {
 
     }
 
+   override fun scrollToUpload() {
+        index = 2
+        scrollByIndex(index)
+    }
+
+    override fun scrollToHome() {
+        index = 0
+        scrollByIndex(index)
+    }
+
+    private fun scrollByIndex(index: Int) {
+        viewPager.currentItem = index
+        bottomNavigationView.menu.getItem(index).isChecked = true
+    }
+
     private fun initViews() {
         viewPager = findViewById(R.id.viewPager)
         bottomNavigationView = findViewById(R.id.bottomNavigatonView)
 
-        bottomNavigationView.setOnItemSelectedListener { item->
-            when(item.itemId){
-                R.id.navigation_home -> viewPager.setCurrentItem(0)
-                R.id.navigation_search -> viewPager.setCurrentItem(1)
-                R.id.navigation_upload -> viewPager.setCurrentItem(2)
-                R.id.navigation_favourite -> viewPager.setCurrentItem(3)
-                R.id.navigation_profile -> viewPager.setCurrentItem(4)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> viewPager.currentItem = 0
+                R.id.navigation_search -> viewPager.currentItem = 1
+                R.id.navigation_upload -> viewPager.currentItem = 2
+                R.id.navigation_favourite -> viewPager.currentItem = 3
+                R.id.navigation_profile -> viewPager.currentItem = 4
             }
             true
         }
 
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
-            ) {}
+            ) {
+            }
 
             override fun onPageSelected(position: Int) {
-              index = position
+                index = position
                 bottomNavigationView.menu.getItem(index).isChecked = true
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
 
         })
-    //home and upload fragments are global for communication purpose
+        //home and upload fragments are global for communication purpose
 
         homeFragment = HomeFragment()
         uploadFragment = UploadFragment()

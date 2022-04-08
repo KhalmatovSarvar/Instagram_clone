@@ -27,21 +27,83 @@
                 android:text="@string/str_upload"
                 android:textColor="@color/black"
                 android:textSize="17sp"/>
+
             <ImageView
-                android:id="@+id/iv_camera"
+                android:id="@+id/iv_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_upload"/>
+                android:src="@drawable/ic_upload" />
 
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
-    <TextView
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@color/white"
+     android:orientation="vertical">
+     <FrameLayout
+         android:id="@+id/fl_view"
+         android:layout_width="match_parent"
+         android:layout_height="400dp">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#eeeeee"
+             android:gravity="center_vertical|center_horizontal">
+             <ImageView
+                 android:layout_width="60dp"
+                 android:layout_height="40dp"
+                 android:id="@+id/iv_pick"
+                 android:src="@drawable/ic_add_photo"/>
+         </LinearLayout>
+         <FrameLayout
+             android:id="@+id/fl_photo"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:clickable="true"
+             android:focusable="true"
+             android:visibility="gone">
+             <ImageView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/iv_photo"
+                 android:adjustViewBounds="true"
+                 android:scaleType="centerCrop"
+                 android:src="@drawable/bg_image"
+                 android:visibility="visible"/>
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:gravity="right"
+                 android:padding="15dp">
+                 <ImageView
+                     android:layout_width="35dp"
+                     android:layout_height="35dp"
+                     android:id="@+id/iv_close"
+                     android:src="@drawable/iv_close"/>
+             </LinearLayout>
+
+         </FrameLayout>
+
+     </FrameLayout>
+
+
+ </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="33sp"
-        android:text="@string/str_upload"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="15dp"
+        android:paddingTop="10dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/str_write_caption"
+            android:minHeight="50dp"
+            android:textSize="16dp"
+            android:id="@+id/et_caption"/>
+    </LinearLayout>
 
 </LinearLayout>
