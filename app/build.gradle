@@ -45,4 +45,10 @@ dependencies {
 //for visualizing the pictures
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+
+    //glide
+    implementation 'io.github.sangcomz:fishbun:1.0.0-beta01'
+
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 }
