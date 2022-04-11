@@ -32,11 +32,9 @@
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="33sp"
-        android:text="@string/str_favourite"
-        android:gravity="center"/>
+        android:id="@+id/recyclerView"/>
 
 </LinearLayout>
