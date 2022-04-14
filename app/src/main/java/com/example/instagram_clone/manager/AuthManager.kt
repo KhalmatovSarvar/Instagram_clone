@@ -13,8 +13,7 @@ object AuthManager {
         return currentUser() != null
     }
 
-    private fun currentUser(): FirebaseUser? {
-
+    fun currentUser(): FirebaseUser? {
         return firebaseAuth.currentUser
     }
 
@@ -28,8 +27,9 @@ object AuthManager {
             }
         }
     }
-    fun signUp(email: String, password: String, handler: AuthHandler){
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task->
+
+    fun signUp(email: String, password: String, handler: AuthHandler) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val uid = currentUser()!!.uid
                 handler.onSuccess(uid)
@@ -39,8 +39,10 @@ object AuthManager {
         }
     }
 
-    fun signOut(){
-        Log.d("signout","true")
+    fun signOut() {
+        Log.d("signout", "true")
         firebaseAuth.signOut()
     }
+
+
 }

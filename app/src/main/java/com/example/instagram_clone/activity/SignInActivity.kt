@@ -3,6 +3,7 @@ package com.example.instagram_clone.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -60,6 +61,7 @@ class SignInActivity : BaseActivity() {
 
             override fun onError(exception: Exception?) {
                 toast(getString(R.string.str_sign_in_failed))
+                Log.d("XATO",exception.toString())
 
             }
         })

@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram_clone.R
 import com.example.instagram_clone.adapter.SearchAdapter
+import com.example.instagram_clone.manager.DatabaseManager
+import com.example.instagram_clone.manager.handler.DBUsersHandler
 import com.example.instagram_clone.model.User
+import java.lang.Exception
 
 
 /**
@@ -70,24 +73,20 @@ class SearchFragment : BaseFragment() {
                 users.add(user)
         refreshAdapter(users)
     }
-    private fun loadUsers():ArrayList<User>{
-        items= ArrayList<User>()
-        items.add(User("Sherzod","sherzodjurabekov07@gmail.com"))
-        items.add(User("Sarvar","sarvarkhalmatov4707@gmail.com"))
-        items.add(User("Tohir","tohirrahmatullayev03357@gmail.com"))
-        items.add(User("Uchqun","uchqunboy7777@gmail.com"))
-        items.add(User("Sherzod","sherzodjurabekov07@gmail.com"))
-        items.add(User("Sarvar","sarvarkhalmatov4707@gmail.com"))
-        items.add(User("Tohir","tohirrahmatullayev03357@gmail.com"))
-        items.add(User("Uchqun","uchqunboy7777@gmail.com"))
-        items.add(User("Sherzod","sherzodjurabekov07@gmail.com"))
-        items.add(User("Sarvar","sarvarkhalmatov4707@gmail.com"))
-        items.add(User("Tohir","tohirrahmatullayev03357@gmail.com"))
-        items.add(User("Uchqun","uchqunboy7777@gmail.com"))
-        items.add(User("Sherzod","sherzodjurabekov07@gmail.com"))
-        items.add(User("Sarvar","sarvarkhalmatov4707@gmail.com"))
-        items.add(User("Tohir","tohirrahmatullayev03357@gmail.com"))
-        items.add(User("Uchqun","uchqunboy7777@gmail.com"))
-        return items
+
+    private fun loadUsers() {
+        DatabaseManager.loadUsers(object : DBUsersHandler {
+            override fun onSuccess(users: ArrayList<User>) {
+                items.clear()
+                items.addAll(users)
+                refreshAdapter(items)
+            }
+
+            override fun onError(e: Exception) {
+                TODO("Not yet implemented")
+            }
+        })
     }
+
+
 }

@@ -12,10 +12,16 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.instagram_clone.R
 import com.example.instagram_clone.adapter.ProfileAdapter
 import com.example.instagram_clone.manager.AuthManager
+import com.example.instagram_clone.manager.DatabaseManager
+import com.example.instagram_clone.manager.StorageManager
+import com.example.instagram_clone.manager.handler.DBUserHandler
+import com.example.instagram_clone.manager.handler.StorageHandler
 import com.example.instagram_clone.model.Post
+import com.example.instagram_clone.model.User
 import com.example.instagram_clone.utils.Logger
 import com.google.android.material.imageview.ShapeableImageView
 import com.sangcomz.fishbun.FishBun
@@ -28,6 +34,7 @@ class ProfileFragment : BaseFragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var iv_profile: ShapeableImageView
     lateinit var tv_email: TextView
+    lateinit var tv_fullname: TextView
 
     var pickedPhoto: Uri? = null
     var allPhotos = ArrayList<Uri>()
@@ -44,9 +51,11 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun initView(view: View) {
+        loadUserInfo()
         recyclerView = view.findViewById(R.id.rv_profile)
         recyclerView.layoutManager = GridLayoutManager(activity, 2)
         iv_profile = view.findViewById(R.id.iv_profile)
+        tv_fullname = view.findViewById(R.id.tv_fullname)
         tv_email = view.findViewById(R.id.tv_email)
 
         val iv_logout = view.findViewById<ImageView>(R.id.iv_log_out)
@@ -60,6 +69,28 @@ class ProfileFragment : BaseFragment() {
         }
 
         refreshAdapter(loadPosts())
+    }
+
+    fun loadUserInfo(){
+        DatabaseManager.loadUser(AuthManager.currentUser()!!.uid,object :DBUserHandler{
+            override fun onSuccess(user: User?) {
+                if (user != null){
+                    showUserInfo(user)
+                }
+            }
+
+            override fun onError(e: java.lang.Exception) {
+            }
+        })
+    }
+
+    private fun showUserInfo(user: User) {
+            tv_fullname.text = user.fullname
+        tv_email.text = user.email
+        Glide.with(this).load(user.userImg)
+            .placeholder(R.drawable.ic_person)
+            .error(R.drawable.ic_person)
+            .into(iv_profile)
     }
 
     /**
@@ -82,6 +113,7 @@ class ProfileFragment : BaseFragment() {
                     it.data?.getParcelableArrayListExtra(FishBun.INTENT_PATH) ?: arrayListOf()
                 pickedPhoto = allPhotos.get(0)
                 uploadPickedPhoto()
+                uploadUserPhoto()
             }
         }
 
@@ -103,6 +135,19 @@ class ProfileFragment : BaseFragment() {
         items.add(Post("https://images.unsplash.com/photo-1626497361649-81cc097e9bfd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8bXVzbGltfGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"))
         items.add(Post("https://images.unsplash.com/photo-1649698313333-ba0e8d82db80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"))
         return items
+    }
+
+    private fun uploadUserPhoto(){
+        if (pickedPhoto == null) return
+        StorageManager.uploadUserPhoto(pickedPhoto!!,object :StorageHandler{
+            override fun onSuccess(imgUrl: String) {
+                DatabaseManager.updateUserImage(imgUrl)
+                iv_profile.setImageURI(pickedPhoto)
+            }
+
+            override fun onError(e: Exception) {
+            }
+        })
     }
 
 }

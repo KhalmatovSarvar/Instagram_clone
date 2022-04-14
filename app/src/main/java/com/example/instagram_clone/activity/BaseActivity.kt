@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
@@ -17,6 +18,10 @@ import com.example.instagram_clone.R
 open class BaseActivity : AppCompatActivity() {
     lateinit var context: Context
     var progressDialog: AppCompatDialog? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    context = this
+    }
     fun callMainActivity(context: Context) {
         val intent = Intent(context, MainActivity::class.java)
         startActivity(intent)
