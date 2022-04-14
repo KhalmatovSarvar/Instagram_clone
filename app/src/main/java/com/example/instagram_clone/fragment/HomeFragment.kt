@@ -60,6 +60,7 @@ class HomeFragment:BaseFragment() {
         }
 
         refreshAdapter(loadPosts())
+
         iv_photo = view.findViewById(R.id.iv_camera)
         iv_photo.setOnClickListener {
         listener!!.scrollToUpload()

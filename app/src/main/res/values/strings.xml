@@ -20,4 +20,9 @@
     <string name="str_following">Following</string>
     <string name="str_followers">Followers</string>
     <string name="str_posts">Posts</string>
+
+    <string name="str_sign_in_success">Signed in successfully</string>
+    <string name="str_sign_in_failed">Signed in failed</string>
+    <string name="str_sign_up_success">Signed up successfully</string>
+    <string name="str_sign_up_failed">Signed up failed</string>
 </resources>

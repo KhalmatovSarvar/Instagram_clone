@@ -39,6 +39,7 @@ class PostViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
     var iv_post: ShapeableImageView
     var tv_fullname: TextView
     var tv_time: TextView
+
     var tv_caption: TextView
     var iv_more: ImageView
     var iv_like: ImageView
