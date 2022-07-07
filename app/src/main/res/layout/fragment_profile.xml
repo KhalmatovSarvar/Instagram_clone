@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="jurabekov_sherzod"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"/>
@@ -94,7 +94,7 @@
                 android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="jurabekovsherzod07_gmail_com"
+                android:text=""
                 android:textSize="13sp"
                 android:textStyle="bold"/>
 
@@ -111,9 +111,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_posts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="625"
+                        android:text="0"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
 
@@ -133,9 +134,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_followers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4,588"
+                        android:text="0"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
 
@@ -155,9 +157,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_following"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="985"
+                        android:text="0"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
 

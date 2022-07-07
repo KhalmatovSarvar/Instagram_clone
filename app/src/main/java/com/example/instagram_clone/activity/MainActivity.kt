@@ -1,12 +1,13 @@
 package com.example.instagram_clone.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import com.example.instagram_clone.R
 import com.example.instagram_clone.adapter.ViewPagerAdapter
 import com.example.instagram_clone.fragment.*
+import com.example.instagram_clone.fragments.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.lang.RuntimeException
 
 /*
 It contains view pager with 5 fragments in  MainActivity,
@@ -25,6 +26,7 @@ class MainActivity : BaseActivity(), UploadFragment.UploadListener,HomeFragment.
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initViews()
+        throw RuntimeException("Test Crash")
 
     }
 

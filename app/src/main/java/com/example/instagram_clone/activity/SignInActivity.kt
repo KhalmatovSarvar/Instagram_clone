@@ -51,10 +51,10 @@ class SignInActivity : BaseActivity() {
     }
 
     private fun fireBaseSignIn(email: String, password: String) {
-//        showLoading(this)
+        showLoading(this)
         AuthManager.signIn(email,password,object :AuthHandler{
             override fun onSuccess(uid: String) {
-//                dissmissLoading()
+                dissmissLoading()
                 toast(getString(R.string.str_sign_in_success))
                 callMainActivity()
             }

@@ -18,8 +18,7 @@ import com.example.instagram_clone.adapter.ProfileAdapter
 import com.example.instagram_clone.manager.AuthManager
 import com.example.instagram_clone.manager.DatabaseManager
 import com.example.instagram_clone.manager.StorageManager
-import com.example.instagram_clone.manager.handler.DBUserHandler
-import com.example.instagram_clone.manager.handler.StorageHandler
+import com.example.instagram_clone.manager.handler.*
 import com.example.instagram_clone.model.Post
 import com.example.instagram_clone.model.User
 import com.example.instagram_clone.utils.Logger
@@ -35,6 +34,11 @@ class ProfileFragment : BaseFragment() {
     lateinit var iv_profile: ShapeableImageView
     lateinit var tv_email: TextView
     lateinit var tv_fullname: TextView
+    lateinit var tv_posts: TextView
+
+    lateinit var tv_followers:TextView
+    lateinit var tv_following:TextView
+
 
     var pickedPhoto: Uri? = null
     var allPhotos = ArrayList<Uri>()
@@ -52,11 +56,17 @@ class ProfileFragment : BaseFragment() {
 
     private fun initView(view: View) {
         loadUserInfo()
+        loadMyPosts()
+        loadMyFollowing()
+        loadMyFollowers()
         recyclerView = view.findViewById(R.id.rv_profile)
         recyclerView.layoutManager = GridLayoutManager(activity, 2)
         iv_profile = view.findViewById(R.id.iv_profile)
         tv_fullname = view.findViewById(R.id.tv_fullname)
         tv_email = view.findViewById(R.id.tv_email)
+        tv_posts = view.findViewById(R.id.tv_posts)
+        tv_followers = view.findViewById(R.id.tv_followers)
+        tv_following = view.findViewById(R.id.tv_following)
 
         val iv_logout = view.findViewById<ImageView>(R.id.iv_log_out)
         iv_logout.setOnClickListener {
@@ -64,17 +74,56 @@ class ProfileFragment : BaseFragment() {
             AuthManager.signOut()
             callSignInActivity(requireActivity())
         }
-        iv_profile.setOnClickListener{
-        pickFishBunPhoto()
+        iv_profile.setOnClickListener {
+            pickFishBunPhoto()
         }
-
-        refreshAdapter(loadPosts())
     }
 
-    fun loadUserInfo(){
-        DatabaseManager.loadUser(AuthManager.currentUser()!!.uid,object :DBUserHandler{
+
+    private fun loadMyFollowing() {
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadFollowing(uid, object : DBUsersHandler {
+            override fun onSuccess(users: ArrayList<User>) {
+                tv_following.text = users.size.toString()
+            }
+
+            override fun onError(e: java.lang.Exception) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+
+    private fun loadMyFollowers() {
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadFollowers(uid, object : DBUsersHandler {
+            override fun onSuccess(users: ArrayList<User>) {
+                tv_followers.text = users.size.toString()
+            }
+
+            override fun onError(e: java.lang.Exception) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+    private fun loadMyPosts() {
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadPosts(uid, object : DBPostsHandler {
+            override fun onSuccess(posts: ArrayList<Post>) {
+                tv_posts.text = posts.size.toString()
+                refreshAdapter(posts)
+            }
+
+            override fun onError(e: java.lang.Exception) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    fun loadUserInfo() {
+        DatabaseManager.loadUser(AuthManager.currentUser()!!.uid, object : DBUserHandler {
             override fun onSuccess(user: User?) {
-                if (user != null){
+                if (user != null) {
                     showUserInfo(user)
                 }
             }
@@ -85,7 +134,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun showUserInfo(user: User) {
-            tv_fullname.text = user.fullname
+        tv_fullname.text = user.fullname
         tv_email.text = user.email
         Glide.with(this).load(user.userImg)
             .placeholder(R.drawable.ic_person)
@@ -128,18 +177,9 @@ class ProfileFragment : BaseFragment() {
         recyclerView.adapter = adapter
     }
 
-    private fun loadPosts(): ArrayList<Post> {
-        val items = ArrayList<Post>()
-        items.add(Post("https://images.unsplash.com/photo-1626497361649-81cc097e9bfd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8bXVzbGltfGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"))
-        items.add(Post("https://images.unsplash.com/photo-1626497361649-81cc097e9bfd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8bXVzbGltfGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"))
-        items.add(Post("https://images.unsplash.com/photo-1626497361649-81cc097e9bfd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8bXVzbGltfGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"))
-        items.add(Post("https://images.unsplash.com/photo-1649698313333-ba0e8d82db80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"))
-        return items
-    }
-
-    private fun uploadUserPhoto(){
+    private fun uploadUserPhoto() {
         if (pickedPhoto == null) return
-        StorageManager.uploadUserPhoto(pickedPhoto!!,object :StorageHandler{
+        StorageManager.uploadUserPhoto(pickedPhoto!!, object : StorageHandler {
             override fun onSuccess(imgUrl: String) {
                 DatabaseManager.updateUserImage(imgUrl)
                 iv_profile.setImageURI(pickedPhoto)

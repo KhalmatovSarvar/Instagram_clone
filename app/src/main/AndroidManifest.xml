@@ -19,7 +19,14 @@
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
+        <service android:name=".service.FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true">

@@ -6,17 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.instagram_clone.R
 import com.example.instagram_clone.adapter.FavouriteAdapter
-import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.instagram_clone.manager.AuthManager
+import com.example.instagram_clone.manager.DatabaseManager
+import com.example.instagram_clone.manager.handler.DBPostHandler
+import com.example.instagram_clone.manager.handler.DBPostsHandler
 
 import com.example.instagram_clone.model.Post
+import com.example.instagram_clone.utils.DialogListener
+import com.example.instagram_clone.utils.Utils
 
-class FavouriteFragment:BaseFragment() {
+class FavouriteFragment : BaseFragment() {
     val TAG = FavouriteFragment::class.java.simpleName
     lateinit var recyclerView: RecyclerView
-
-    lateinit var iv_photo: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,29 +31,60 @@ class FavouriteFragment:BaseFragment() {
         return view
     }
 
-
     private fun initViews(view: View) {
         recyclerView = view.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(activity, 1)
+        recyclerView.setLayoutManager(GridLayoutManager(activity, 1))
 
-
-
-        refreshAdapter(loadPosts())
-
+        loadLikedFeeds()
     }
 
     private fun refreshAdapter(items: ArrayList<Post>) {
         val adapter = FavouriteAdapter(this, items)
         recyclerView.adapter = adapter
-
     }
 
-    private fun loadPosts(): ArrayList<Post> {
-        val items = ArrayList<Post>()
-        items.add(Post("https://images.unsplash.com/photo-1626497361649-81cc097e9bfd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8bXVzbGltfGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"))
-        items.add(Post("https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bWFufGVufDB8MHwwfHw%3D&auto=format&fit=crop&w=500&q=60"))
-        items.add(Post("https://images.unsplash.com/photo-1488161628813-04466f872be2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fG1hbnxlbnwwfDF8MHx8&auto=format&fit=crop&w=500&q=60"))
-        return items
+    fun likeOrUnlikePost(post: Post) {
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.likeFeedPost(uid, post)
+
+        loadLikedFeeds()
     }
 
+    fun loadLikedFeeds() {
+        showLoading(requireActivity())
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadLikedFeeds(uid, object : DBPostsHandler {
+            override fun onSuccess(posts: ArrayList<Post>) {
+                dismissLoading()
+                refreshAdapter(posts)
+            }
+
+            override fun onError(e: Exception) {
+                dismissLoading()
+            }
+        })
+    }
+
+    fun showDeleteDialog(post: Post){
+        Utils.dialogDouble(requireContext(), getString(R.string.str_delete_post), object :
+            DialogListener {
+            override fun onCallback(isChosen: Boolean) {
+                if(isChosen){
+                    deletePost(post)
+                }
+            }
+        })
+    }
+
+    fun deletePost(post: Post) {
+        DatabaseManager.deletePost(post, object : DBPostHandler {
+            override fun onSuccess(post: Post?) {
+                loadLikedFeeds()
+            }
+
+            override fun onError(e: java.lang.Exception) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
 }
